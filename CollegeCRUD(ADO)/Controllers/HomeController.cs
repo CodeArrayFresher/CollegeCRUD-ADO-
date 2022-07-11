@@ -19,7 +19,9 @@ namespace CollegeCRUD_ADO_.Controllers
         }
         public ActionResult Index()
         {
-            return View();
+            ModelState.Clear();
+            var model = repo.StudentDetails();
+            return View(model);
         }
 
         // GET: Home/Details/5
@@ -49,7 +51,7 @@ namespace CollegeCRUD_ADO_.Controllers
                         ViewBag.success = "Employee added successfully";
                     }
                 }
-                return View("Index");
+                return RedirectToAction("Index");
               
             }
             catch (Exception ex)
@@ -61,45 +63,62 @@ namespace CollegeCRUD_ADO_.Controllers
         // GET: Home/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var model = repo.StudentDetails().Find(x => x.id == id);
+            model.genders = repo.GetGenders();
+            return PartialView("Edit",model);
         }
 
         // POST: Home/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int id,Student student)
         {
             try
             {
                 // TODO: Add update logic here
+                repo.UpdateStudent(student);    
 
                 return RedirectToAction("Index");
             }
-            catch
+            catch(Exception ex)
             {
-                return View();
+                throw ex;
             }
         }
 
         // GET: Home/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            try
+            {
+
+                if (repo.DeleteStudent(id))
+                {
+                    ViewBag.AlertMsg = "Student details deleted successfully";
+
+                }
+                return RedirectToAction("Index");
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        // POST: Home/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public bool MultipleDelete(int[] multidelete)
         {
             try
             {
-                // TODO: Add delete logic here
+                var x = repo.MultipleDelete(multidelete);
 
-                return RedirectToAction("Index");
+                return x;
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+
+                throw ex;
             }
+
         }
     }
 }

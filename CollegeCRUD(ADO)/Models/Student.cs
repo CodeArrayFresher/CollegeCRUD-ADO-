@@ -8,7 +8,7 @@ namespace CollegeCRUD_ADO_.Models
 {
     public class Student
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         public string Fname { get; set; }
         public string MiddleName { get; set; }
 
@@ -23,6 +23,7 @@ namespace CollegeCRUD_ADO_.Models
         public bool isDeleted { get; set; }
 
         //public Gender Genders { get; set; }
+        public string GenderName { get; set; }
       public List<Gender> genders { get; set; }
     }
 }
